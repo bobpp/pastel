@@ -1,0 +1,9 @@
+CREATE TABLE memos (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	access_key TEXT NOT NULL,
+	body TEXT NOT NULL,
+	created_at INTEGER NOT NULL,
+	updated_at INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX i1 ON memos (access_key);
+
