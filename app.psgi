@@ -52,7 +52,10 @@ post '/create' => sub {
 # view memo
 get '/memos/:key' => sub {
 	my($c, $args) = @_;
-	my $key = $args->{key} || $c->res_404;
+	my $key = $args->{key};
+	unless ($key) {
+		return $c->res_404;
+	}
 
 	my $memo = $c->dbh->selectrow_hashref(
 		'SELECT * FROM memos WHERE access_key = ?',
@@ -61,7 +64,7 @@ get '/memos/:key' => sub {
 	);
 
 	unless ($memo) {
-		$c->res_404;
+		return $c->res_404;
 	}
 
 	return $c->render('memo.tx', +{
