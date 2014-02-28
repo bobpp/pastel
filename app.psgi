@@ -128,10 +128,9 @@ __DATA__
 @@ memo.tx
 : cascade layout
 : around body -> {
-<p>
-  <pre><:= $body :></pre>
-  Time: <:= $created_at :><br />
-</p>
+
+<p><textarea style="background:#eee;" readonly cols="95" rows="25"><:= $body :></textarea></p>
+<p>Time: <:= $created_at :></p>
 
 <a href="<:= uri_for('/') :>">Back</a>
 : }
