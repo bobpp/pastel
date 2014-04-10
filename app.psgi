@@ -141,6 +141,7 @@ __DATA__
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Pastel!</title>
+  <link rel="shortcut icon" type="image/ico" href="/static/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="/static/stylesheets/scaffold.css">
   <link rel="stylesheet" type="text/css" href="/static/stylesheets/main.css">
 </head>
