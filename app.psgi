@@ -73,6 +73,27 @@ get '/memos/:key' => sub {
 	});
 };
 
+# delete memo
+any ['delete'] => '/memos/:key' => sub {
+	my ($c, $args) = @_;
+	my $key = $args->{key};
+	unless ($key) {
+		return $c->res_404;
+	}
+	my $memo = $c->dbh->selectrow_hashref(
+		'SELECT access_key FROM memos WHERE access_key = ?',
+		undef,
+		$key,
+	);
+	unless ($memo) {
+		return $c->res_404;
+	}
+	my $rows_deleted = $c->dbh->do(q{
+		DELETE FROM memos
+		WHERE access_key = ?
+	}, undef, $key);
+	return $c->redirect('/');
+};
 
 
 # for your security
