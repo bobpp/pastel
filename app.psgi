@@ -16,9 +16,13 @@ __PACKAGE__->load_plugins('DBI');
 
 # put your configuration here
 sub config {
+	my $database_filename = "$ENV{PLACK_ENV}.db";
+	my $initialization_sql_filename = "sqlite.sql";
 	+{
 		'Text::Xslate' => +{ syntax => 'Kolon', module => [] },
-		'DBI' => [ "dbi:SQLite:dbname=$ENV{PLACK_ENV}.db", '', '' ],
+		'database_filename' => $database_filename,
+		'DBI' => [ "dbi:SQLite:dbname=$database_filename", '', '' ],
+		'initialization_sql_filename' => $initialization_sql_filename,
 	}
 }
 
@@ -34,6 +38,11 @@ post '/create' => sub {
 
 	# validation
 	my $body = $c->req->param('body') || return $c->redirect('/');
+
+	# init
+	if (!-f config->{database_filename}) {
+		_initialize_database(config->{database_filename});
+	}
 
 	# create
 	my $key = sub {
@@ -94,6 +103,15 @@ any ['delete'] => '/memos/:key' => sub {
 	}, undef, $key);
 	return $c->redirect('/');
 };
+
+sub _initialize_database {
+	my ($database_filename) = @_;
+	my $init_sql_file = config->{initialization_sql_filename};
+	system("sqlite3 $database_filename < $init_sql_file");
+	if ($? != 0) {
+		die "SQLite initialization error ($!)";
+	}
+}
 
 
 # for your security
